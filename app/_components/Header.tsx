@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import React from "react";
@@ -12,6 +13,7 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import Link from "next/link";
+import { UserButton, useUser } from "@clerk/nextjs";
 
 const courses = [
   {
@@ -65,6 +67,7 @@ const courses = [
 ];
 
 function Header() {
+  const { user } = useUser();
   return (
     <div className="p-4 max-w-7xl flex justify-between items-center w-full">
       <div className="flex gap-2 items-center">
@@ -92,17 +95,17 @@ function Header() {
             </NavigationMenuContent>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <NavigationMenuLink>
+            <NavigationMenuLink asChild>
               <Link href={"/projects"}>Projects</Link>
             </NavigationMenuLink>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <NavigationMenuLink>
+            <NavigationMenuLink asChild>
               <Link href={"/pricing"}>Pricing</Link>
             </NavigationMenuLink>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <NavigationMenuLink>
+            <NavigationMenuLink asChild>
               <Link href={"/contact-us"}>Contact Us</Link>
             </NavigationMenuLink>
           </NavigationMenuItem>
@@ -120,9 +123,20 @@ function Header() {
           visible: { opacity: 1, x: 0 },
         }}
       >
-        <Button className="font-game text-2xl" variant={"pixel"}>
-          Signup
-        </Button>
+        {!user ? (
+          <Link href={"/sign-in"}>
+            <Button className="font-game text-2xl" variant={"pixel"}>
+              Signup
+            </Button>
+          </Link>
+        ) : (
+          <div className="flex gap-4 items-center">
+            <Button className="font-game text-2xl" variant={"pixel"}>
+              Dashboard
+            </Button>
+            <UserButton />
+          </div>
+        )}
       </MotionWrapperDelay>
     </div>
   );
