@@ -70,10 +70,13 @@ function Header() {
   const { user } = useUser();
   return (
     <div className="p-4 max-w-7xl flex justify-between items-center w-full">
-      <div className="flex gap-2 items-center">
-        <Image src={"/crown.png"} alt="Logo" height={40} width={40} />
-        <h2 className="font-bold text-3xl font-game">CodeBox</h2>
-      </div>
+      <Link href={"/"}>
+        <div className="flex gap-3 items-center">
+          <Image src={"/crown.png"} alt="Logo" height={40} width={40} />
+          <h2 className="font-bold text-3xl font-game">CodeBox</h2>
+        </div>
+      </Link>
+
       {/* Navbar */}
 
       <NavigationMenu>
@@ -131,10 +134,12 @@ function Header() {
           </Link>
         ) : (
           <div className="flex gap-4 items-center">
-            <Button className="font-game text-2xl" variant={"pixel"}>
-              Dashboard
-            </Button>
-            <UserButton />
+            <Link href={"/dashboard"}>
+              <Button className="font-game text-2xl" variant={"pixel"}>
+                Dashboard
+              </Button>
+              <UserButton />
+            </Link>
           </div>
         )}
       </MotionWrapperDelay>
