@@ -2,6 +2,7 @@
 import MotionWrapperDelay from "@/app/components1/FramerMotion/MotionWrapperDelay";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import Link from "next/link";
 import React, { useState } from "react";
 
 function EnrolledCourses() {
@@ -26,9 +27,15 @@ function EnrolledCourses() {
             <h2 className="font-game text-2xl">
               You Don't Have Any Enrolled Courses Yet'
             </h2>
-            <Button variant={"pixel"} className="font-game text-lg" size={"lg"}>
-              Browse All Courses
-            </Button>
+            <Link href={"/courses"}>
+              <Button
+                variant={"pixel"}
+                className="font-game text-lg"
+                size={"lg"}
+              >
+                Browse All Courses
+              </Button>
+            </Link>
           </div>
         </MotionWrapperDelay>
       ) : (
