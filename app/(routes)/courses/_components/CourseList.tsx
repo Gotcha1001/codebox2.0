@@ -15,7 +15,15 @@ export type Course = {
   bannerImage: string;
   tag: string;
   chapters?: Chapter[];
+  userEnrolled?: boolean;
+  courseEnrolledInfo?: CourseEnrolledInfo;
 };
+
+type CourseEnrolledInfo = {
+  xpEarned: number;
+  enrolledDate: any;
+};
+
 type Chapter = {
   chapterId: number;
   courseId: number;

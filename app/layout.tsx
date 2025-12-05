@@ -10,6 +10,7 @@ import {
 import "./globals.css";
 import Provider from "./provider";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Toaster } from "sonner";
 
 const GameFont = Jersey_10({
   subsets: ["latin"],
@@ -50,6 +51,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             {children}
+            <Toaster richColors />
           </Provider>
         </body>
       </html>
