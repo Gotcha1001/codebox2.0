@@ -9,6 +9,9 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
+        pixelDisabled:
+          "bg-gray-400 text-gray-700 border-2 border-gray-500 shadow-[0px_0px_0_0_#9ca3af,2px_2px_0_0_#9ca3af] cursor-not-allowed hover:brightness-100 active:shadow-[0_0_0_0_#000]",
+
         pixel:
           "bg-yellow-400 text-black border-2 border-black shadow-[0px_0px_0_0_#c69405,2px_2px_0_0_#c69405] " +
           "active:shadow-[0px_0px_0_0_#c69405] active:translate-x-[2px] active:translate-y-[2px]",
