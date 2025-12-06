@@ -19,6 +19,73 @@ type Props = {
 };
 
 function CourseChapters({ loading, courseDetail }: Props) {
+  const EnableExercise = (
+    chapterIndex: number,
+    exerciseIndex: number,
+    chapterExercisesLength: number
+  ) => {
+    const completed = courseDetail?.completedExercises;
+
+    // If nothing is completed, enable FIRST exercise ONLY
+    if (!completed || completed.length === 0) {
+      return chapterIndex === 0 && exerciseIndex === 0;
+    }
+
+    // last completed
+    const last = completed[completed.length - 1];
+
+    // Convert to global exercise number
+    const currentExerciseNumber =
+      chapterIndex * chapterExercisesLength + exerciseIndex + 1;
+
+    const lastCompletedNumber =
+      (last.chapterId - 1) * chapterExercisesLength + last.exerciseId;
+
+    return currentExerciseNumber === lastCompletedNumber + 2;
+  };
+
+  // const isExerciseCompleted = (chapterId: number, exerciseId: number) => {
+  //   const completedChapters = courseDetail?.completedExercises;
+  //   const completedChapter = completedChapters?.find(
+  //     (item) => item.chapterId == chapterId && item.exerciseId == exerciseId
+  //   );
+  //   return completedChapter ? true : false;
+  // };
+
+  const isExerciseCompleted = (chapterId: number, exerciseIndex: number) => {
+    return courseDetail?.completedExercises?.some(
+      (item) =>
+        item.chapterId === chapterId && item.exerciseId === exerciseIndex + 1
+    );
+  };
+
+  // Also fix EnableExercise — make it sequential per chapter
+  const isExerciseUnlocked = (chapterId: number, exerciseIndex: number) => {
+    // First exercise of first chapter is always unlocked
+    if (
+      chapterId === courseDetail?.chapters?.[0]?.chapterId &&
+      exerciseIndex === 0
+    ) {
+      return true;
+    }
+
+    // Find previous exercise (same chapter, previous index OR last of previous chapter)
+    const prevExerciseInSameChapter = courseDetail?.completedExercises?.some(
+      (item) =>
+        item.chapterId === chapterId && item.exerciseId === exerciseIndex
+    );
+
+    const prevChapterLastExercise = courseDetail?.completedExercises?.some(
+      (item) =>
+        item.chapterId === chapterId - 1 &&
+        item.exerciseId ===
+          courseDetail?.chapters?.find((c) => c.chapterId === chapterId - 1)
+            ?.exercises?.length
+    );
+
+    return prevExerciseInSameChapter || prevChapterLastExercise;
+  };
+
   return (
     <div>
       {courseDetail?.chapters?.length == 0 ? (
@@ -54,25 +121,45 @@ function CourseChapters({ loading, courseDetail }: Props) {
                           </h2>
                           <h2 className="text-3xl">{exc.name}</h2>
                         </div>
-                        {/* <Button className="font-game text-xl" variant={"pixel"}>
-                          {exc?.xp} xp
-                        </Button> */}
 
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Button
-                              className="font-game text-xl"
-                              variant={"pixelDisabled"}
-                            >
-                              ???
-                            </Button>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p className="font-game text-xl">
-                              Please Enroll First
-                            </p>
-                          </TooltipContent>
-                        </Tooltip>
+                        {EnableExercise(
+                          index,
+                          indexExe,
+                          chapter?.exercises?.length
+                        ) ? (
+                          <Button
+                            className="font-game text-xl"
+                            variant={"pixel"}
+                          >
+                            {exc?.xp} xp
+                          </Button>
+                        ) : isExerciseCompleted(
+                            chapter?.chapterId,
+                            indexExe + 1
+                          ) ? (
+                          <Button
+                            className="font-game text-xl bg-green-500"
+                            variant={"pixel"}
+                          >
+                            Completed
+                          </Button>
+                        ) : (
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button
+                                className="font-game text-xl"
+                                variant={"pixelDisabled"}
+                              >
+                                ???
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p className="font-game text-xl">
+                                Please Enroll First
+                              </p>
+                            </TooltipContent>
+                          </Tooltip>
+                        )}
                       </div>
                     ))}
                   </div>
