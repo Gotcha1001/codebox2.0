@@ -12,6 +12,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import Link from "next/link";
 
 type Props = {
   loading: boolean;
@@ -44,20 +45,20 @@ function CourseChapters({ loading, courseDetail }: Props) {
     return currentExerciseNumber === lastCompletedNumber + 2;
   };
 
-  // const isExerciseCompleted = (chapterId: number, exerciseId: number) => {
-  //   const completedChapters = courseDetail?.completedExercises;
-  //   const completedChapter = completedChapters?.find(
-  //     (item) => item.chapterId == chapterId && item.exerciseId == exerciseId
-  //   );
-  //   return completedChapter ? true : false;
-  // };
-
-  const isExerciseCompleted = (chapterId: number, exerciseIndex: number) => {
-    return courseDetail?.completedExercises?.some(
-      (item) =>
-        item.chapterId === chapterId && item.exerciseId === exerciseIndex + 1
+  const isExerciseCompleted = (chapterId: number, exerciseId: number) => {
+    const completedChapters = courseDetail?.completedExercises;
+    const completedChapter = completedChapters?.find(
+      (item) => item.chapterId == chapterId && item.exerciseId == exerciseId
     );
+    return completedChapter ? true : false;
   };
+
+  // const isExerciseCompleted = (chapterId: number, exerciseIndex: number) => {
+  //   return courseDetail?.completedExercises?.some(
+  //     (item) =>
+  //       item.chapterId === chapterId && item.exerciseId === exerciseIndex + 1
+  //   );
+  // };
 
   // Also fix EnableExercise — make it sequential per chapter
   const isExerciseUnlocked = (chapterId: number, exerciseIndex: number) => {
@@ -127,12 +128,23 @@ function CourseChapters({ loading, courseDetail }: Props) {
                           indexExe,
                           chapter?.exercises?.length
                         ) ? (
-                          <Button
-                            className="font-game text-xl"
-                            variant={"pixel"}
+                          <Link
+                            href={
+                              "/courses/" +
+                              courseDetail?.courseId +
+                              "/" +
+                              chapter.chapterId +
+                              "/" +
+                              exc?.slug
+                            }
                           >
-                            {exc?.xp} xp
-                          </Button>
+                            <Button
+                              className="font-game text-xl"
+                              variant={"pixel"}
+                            >
+                              {exc?.xp} xp
+                            </Button>
+                          </Link>
                         ) : isExerciseCompleted(
                             chapter?.chapterId,
                             indexExe + 1
