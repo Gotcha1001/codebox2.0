@@ -123,11 +123,17 @@ function CourseChapters({ loading, courseDetail }: Props) {
                           <h2 className="text-3xl">{exc.name}</h2>
                         </div>
 
-                        {EnableExercise(
-                          index,
-                          indexExe,
-                          chapter?.exercises?.length
+                        {isExerciseCompleted(
+                          chapter?.chapterId,
+                          indexExe + 1
                         ) ? (
+                          <Button
+                            className="font-game text-xl bg-green-500"
+                            variant={"pixel"}
+                          >
+                            Completed
+                          </Button>
+                        ) : courseDetail?.userEnrolled ? (
                           <Link
                             href={
                               "/courses/" +
@@ -145,16 +151,6 @@ function CourseChapters({ loading, courseDetail }: Props) {
                               {exc?.xp} xp
                             </Button>
                           </Link>
-                        ) : isExerciseCompleted(
-                            chapter?.chapterId,
-                            indexExe + 1
-                          ) ? (
-                          <Button
-                            className="font-game text-xl bg-green-500"
-                            variant={"pixel"}
-                          >
-                            Completed
-                          </Button>
                         ) : (
                           <Tooltip>
                             <TooltipTrigger asChild>
@@ -186,3 +182,175 @@ function CourseChapters({ loading, courseDetail }: Props) {
 }
 
 export default CourseChapters;
+// import {
+//   Accordion,
+//   AccordionContent,
+//   AccordionItem,
+//   AccordionTrigger,
+// } from "@/components/ui/accordion";
+// import { Course } from "../../_components/CourseList";
+// import { Skeleton } from "@/components/ui/skeleton";
+// import { Button } from "@/components/ui/button";
+// import {
+//   Tooltip,
+//   TooltipContent,
+//   TooltipTrigger,
+// } from "@/components/ui/tooltip";
+// import Link from "next/link";
+
+// type Props = {
+//   loading: boolean;
+//   courseDetail: Course | undefined;
+// };
+
+// function CourseChapters({ loading, courseDetail }: Props) {
+//   const isExerciseCompleted = (chapterId: number, exerciseId: number) => {
+//     const completedChapters = courseDetail?.completedExercises;
+//     const completedChapter = completedChapters?.find(
+//       (item) => item.chapterId == chapterId && item.exerciseId == exerciseId
+//     );
+//     return completedChapter ? true : false;
+//   };
+
+//   const EnableExercise = (
+//     chapterIndex: number,
+//     exerciseIndex: number,
+//     chapterExercisesLength: number
+//   ) => {
+//     const completed = courseDetail?.completedExercises;
+//     const currentChapter = courseDetail?.chapters?.[chapterIndex];
+
+//     // If nothing is completed, enable FIRST exercise ONLY
+//     if (!completed || completed.length === 0) {
+//       return chapterIndex === 0 && exerciseIndex === 0;
+//     }
+
+//     // Check if current exercise is already completed
+//     if (isExerciseCompleted(currentChapter?.chapterId!, exerciseIndex + 1)) {
+//       return true; // Already completed exercises are enabled
+//     }
+
+//     // Check if previous exercise is completed
+//     if (exerciseIndex > 0) {
+//       // Previous exercise in same chapter
+//       return isExerciseCompleted(currentChapter?.chapterId!, exerciseIndex);
+//     } else if (chapterIndex > 0) {
+//       // Last exercise of previous chapter
+//       const prevChapter = courseDetail?.chapters?.[chapterIndex - 1];
+//       const lastExerciseOfPrevChapter = prevChapter?.exercises?.length!;
+
+//       return isExerciseCompleted(
+//         prevChapter?.chapterId!,
+//         lastExerciseOfPrevChapter
+//       );
+//     }
+
+//     return false;
+//   };
+
+//   return (
+//     <div>
+//       {courseDetail?.chapters?.length == 0 ? (
+//         <div>
+//           <Skeleton className="w-full h-[100px] rounded-2xl" />
+//           <Skeleton className="w-full h-[100px] mt-5 rounded-2xl" />
+//           <Skeleton className="w-full h-[100px] mt-5 rounded-2xl" />
+//         </div>
+//       ) : (
+//         <div className="p-5 border-4 rounded-2xl">
+//           {courseDetail?.chapters?.map((chapter, index) => (
+//             <Accordion type="single" collapsible key={index}>
+//               <AccordionItem value="item-1">
+//                 <AccordionTrigger className="p-3 hover:bg-radial from-purple-500 to-indigo-900 font-game text-4xl">
+//                   <div className="flex gap-10">
+//                     <h2 className="h-12 w-12 bg-zinc-800 rounded-full flex items-center justify-center hover:bg-radial from-blue-500 to-black">
+//                       {index + 1}
+//                     </h2>
+//                   </div>
+//                   {chapter?.name}
+//                 </AccordionTrigger>
+//                 <AccordionContent>
+//                   <div className="p-7 bg-zinc-900">
+//                     {chapter?.exercises.map((exc, indexExe) => {
+//                       const isCompleted = isExerciseCompleted(
+//                         chapter?.chapterId,
+//                         indexExe + 1
+//                       );
+//                       const isEnabled = EnableExercise(
+//                         index,
+//                         indexExe,
+//                         chapter?.exercises?.length
+//                       );
+
+//                       return (
+//                         <div
+//                           key={indexExe}
+//                           className="flex items-center justify-between mb-7"
+//                         >
+//                           <div className="flex items-center gap-10 font-game">
+//                             <h2 className="text-3xl">
+//                               Exercise
+//                               {index * chapter?.exercises?.length +
+//                                 indexExe +
+//                                 1}
+//                             </h2>
+//                             <h2 className="text-3xl">{exc.name}</h2>
+//                           </div>
+
+//                           {isCompleted ? (
+//                             <Button
+//                               className="font-game text-xl bg-green-500"
+//                               variant={"pixel"}
+//                             >
+//                               Completed
+//                             </Button>
+//                           ) : isEnabled ? (
+//                             <Link
+//                               href={
+//                                 "/courses/" +
+//                                 courseDetail?.courseId +
+//                                 "/" +
+//                                 chapter.chapterId +
+//                                 "/" +
+//                                 exc?.slug
+//                               }
+//                             >
+//                               <Button
+//                                 className="font-game text-xl"
+//                                 variant={"pixel"}
+//                               >
+//                                 {exc?.xp} xp
+//                               </Button>
+//                             </Link>
+//                           ) : (
+//                             <Tooltip>
+//                               <TooltipTrigger asChild>
+//                                 <Button
+//                                   className="font-game text-xl"
+//                                   variant={"pixelDisabled"}
+//                                 >
+//                                   ???
+//                                 </Button>
+//                               </TooltipTrigger>
+//                               <TooltipContent>
+//                                 <p className="font-game text-xl">
+//                                   Complete previous exercise first
+//                                 </p>
+//                               </TooltipContent>
+//                             </Tooltip>
+//                           )}
+//                         </div>
+//                       );
+//                     })}
+//                   </div>
+//                 </AccordionContent>
+//               </AccordionItem>
+//             </Accordion>
+//           ))}
+//         </div>
+//       )}
+//     </div>
+//   );
+// }
+
+// export default CourseChapters;

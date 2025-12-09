@@ -10,11 +10,12 @@ type Props = {
 function ContentSection({ courseExerciseData, loading }: Props) {
   const ContentInfo = courseExerciseData?.exerciseData;
   return (
-    <div className="p-10">
+    <div className="p-10 mb-28">
       {loading || !ContentInfo ? (
         <Skeleton className="h-full w-full m-10 rounded-2xl" />
       ) : (
         <div>
+          npm i @codesandbox/sandpack-react
           <h2 className="font-game text-3xl my-3">
             {courseExerciseData?.exerciseData?.exerciseName}
           </h2>
