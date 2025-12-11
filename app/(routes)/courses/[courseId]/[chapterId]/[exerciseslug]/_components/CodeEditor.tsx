@@ -74,7 +74,8 @@ function CodeEditor({ courseExerciseData, loading }: Props) {
     <div>
       <SandpackProvider
         theme={nightOwl}
-        template="static"
+        //@ts-ignore
+        template={courseExerciseData?.editorType ?? "react"}
         style={{
           height: "100vh",
         }}

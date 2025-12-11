@@ -1,11 +1,13 @@
 "use client";
 import MotionWrapperDelay from "@/app/components1/FramerMotion/MotionWrapperDelay";
+import { UserDetailContext } from "@/context/UserDetailContext";
 import { useUser } from "@clerk/nextjs";
 import Image from "next/image";
-import React from "react";
+import React, { useContext } from "react";
 
 function UserStatus() {
   const { user } = useUser();
+  const { userDetail, setUserDetail } = useContext(UserDetailContext);
 
   return (
     <div className="p-7 border-4 rounded-2xl min-w-sm">
@@ -42,7 +44,7 @@ function UserStatus() {
           </MotionWrapperDelay>
 
           <div>
-            <h2 className="text-3xl font-game">20</h2>
+            <h2 className="text-3xl font-game">{userDetail?.points}</h2>
             <h2 className="font-game text-xl text-gray-500">Total Rewards</h2>
           </div>
         </div>
