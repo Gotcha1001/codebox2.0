@@ -173,6 +173,7 @@ export type CourseExercise = {
   chapterId: number;
   desc: string;
   name: string;
+  editorType?: string;
   exercises: exercise[];
   exerciseData: ExerciseData;
   completedExercise: CompletedExercises[];
