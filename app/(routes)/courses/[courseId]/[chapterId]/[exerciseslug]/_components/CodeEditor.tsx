@@ -133,18 +133,17 @@ import {
   SandpackPreview,
   useSandpack,
 } from "@codesandbox/sandpack-react";
-
+import {
+  ResizablePanelGroup,
+  ResizablePanel,
+  ResizableHandle,
+} from "@/components/ui/resizable";
 import { CourseExercise } from "../page";
 import { Button } from "@/components/ui/button";
 import { nightOwl } from "@codesandbox/sandpack-themes";
 import { useParams } from "next/navigation";
 import axios from "axios";
 import { toast } from "sonner";
-import {
-  ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup,
-} from "@/components/ui/resizable";
 
 type Props = {
   courseExerciseData: CourseExercise | undefined;
@@ -186,7 +185,6 @@ function CodeEditor({ courseExerciseData, loading }: Props) {
   const IsCompleted = courseExerciseData?.completedExercise?.find(
     (item) => item?.exerciseId === Number(exerciseIndex) + 1
   );
-  console.log(IsCompleted);
 
   const onCompleteExercise = async () => {
     if (exerciseIndex == undefined) {
@@ -202,12 +200,59 @@ function CodeEditor({ courseExerciseData, loading }: Props) {
     toast.success("Exercise Completed!");
   };
 
+  // Get the correct template based on editorType
+  const getTemplate = () => {
+    const editorType = courseExerciseData?.editorType?.toLowerCase();
+
+    // Map your editorTypes to Sandpack templates
+    switch (editorType) {
+      case "html":
+      case "static":
+        return "static"; // For HTML/CSS/JS
+      case "react":
+        return "react";
+      case "react-ts":
+        return "react-ts";
+      case "vanilla":
+      case "javascript":
+        return "vanilla";
+      case "vanilla-ts":
+      case "typescript":
+        return "vanilla-ts";
+      case "vue":
+        return "vue";
+      case "vue-ts":
+        return "vue-ts";
+      case "angular":
+        return "angular";
+      case "svelte":
+        return "svelte";
+      case "solid":
+        return "solid";
+      case "nextjs":
+        return "nextjs";
+      case "vite-react":
+        return "vite-react";
+      case "vite-react-ts":
+        return "vite-react-ts";
+      case "node":
+        return "node";
+      // Python is not supported by Sandpack, fallback to static
+      case "python":
+        console.warn(
+          "Python is not supported by Sandpack. Using static template."
+        );
+        return "static";
+      default:
+        return "static"; // Default to static for HTML courses
+    }
+  };
+
   return (
     <div>
       <SandpackProvider
         theme={nightOwl}
-        //@ts-ignore
-        template={courseExerciseData?.editorType ?? "react"}
+        template={getTemplate()}
         style={{
           height: "100vh",
         }}
